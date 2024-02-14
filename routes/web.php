@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+
+Route::prefix('admin')->group(function () {
+    Route::match(['get', 'post'], '/login', [DashboardController::class, 'login']);
+    Route::group(['middleware' => 'admin'], function () {
+        Route::get('/dashboard', [DashboardController::class, 'index']);
+        Route::match(['get', 'post'], '/update-password', [DashboardController::class, 'updatePassword']);
+        Route::get('/logout', [DashboardController::class, 'logout']);
+        Route::post('/check-current-password', [DashboardController::class, 'checkCurrentPassword']);
+    });
 });
