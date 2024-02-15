@@ -34,15 +34,18 @@
                                 <div class="card-header">
                                     <h3 class="card-title">Update Admin Password</h3>
                                 </div>
-                                {{-- @if ($errors->any())
+
+                                @if (session('error'))
                                     <div class="alert alert-danger" role="alert">
-                                        <ul>
-                                            @foreach ($errors->all() as $error)
-                                                <li>{{ $error }}</li>
-                                            @endforeach
-                                        </ul>
+                                        {{ session('error') }}
                                     </div>
-                                @endif --}}
+                                @endif
+
+                                @if (session('message_success'))
+                                    <div class="alert alert-success" role="alert">
+                                        {{ session('message_success') }}
+                                    </div>
+                                @endif
 
                                 <!-- form start -->
                                 <form action="{{ url('admin/update-password') }}" method="POST">
@@ -105,12 +108,36 @@
     </div>
 @endsection
 
-@section('scripts')
+@push('push_scripts')
     <script src="{{ url('admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js') }}"></script>
-    <script src="{{ url('admin/js/custom.js') }}"></script>
+    <script>
+        $(document).ready(function() {
+    $('#current_password').on('keyup',function(){
+        let current_password = $(this).val();
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: 'post',
+                url: '/admin/check-current-password',
+                data: {current_password:current_password},
+                success: function(response){
+                    if(response == false){
+                        $('#verify_current_pwd').html("<font color='red'>Current Password is Incorrect</font>");
+                    }else if(response == true){
+                        $('#verify_current_pwd').html("<font color='green'>Current Password is Correct</font>");
+                    }
+                },
+                error: function(){
+                    alert('Error');
+                }
+            });
+    })
+});
+    </script>
     <script>
         $(function() {
             bsCustomFileInput.init();
         });
     </script>
-@endsection
+@endpush
