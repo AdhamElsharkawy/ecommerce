@@ -57,7 +57,7 @@ class DashboardController extends Controller
     public function updatePassword(Request $request)
     {
         if ($request->isMethod('post')) {
-            
+
             $data = $request->all();
             $rules = [
                 'current_password' => 'required|min:6|max:255',
@@ -81,7 +81,7 @@ class DashboardController extends Controller
             if (Hash::check($data['current_password'], $current_password)) {
                 $new_pwd = bcrypt($data['new_password']);
                 if ($data['new_password'] == $data['confirm_password']) {
-                    if($data['current_password'] == $data['new_password']){
+                    if ($data['current_password'] == $data['new_password']) {
                         return redirect('admin/update-password')->with('error', 'New Password cannot be same as your current password');
                     }
                     Admin::where('id', Auth::guard('admin')->user()->id)->update(['password' => $new_pwd]);
@@ -101,9 +101,9 @@ class DashboardController extends Controller
         if ($request->isMethod('post')) {
             $data = $request->all();
             $rules = [
+                'email' => 'required|email:rfc,dns',
                 'name' => 'required|regex:/^[\pL\s\-]+$/u|max:255',
                 'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-                'email' => 'required|email|max:255',
             ];
 
             $customMessages = [
@@ -116,27 +116,26 @@ class DashboardController extends Controller
                 'email.email' => 'Valid Email is required',
             ];
 
-
             $this->validate($request, $rules, $customMessages);
-            $admin =  Admin::where('email', Auth::guard('admin')->user()->email);
-          
+
+            $admin =  Admin::where('email', Auth::guard('admin')->user()->email)->first();
             if ($request->hasFile('image')) {
                 $image = $request->file('image');
                 if ($image->isValid()) {
-                    $imageName = time().'.'.$image->getClientOriginalExtension();                    $imagePath = 'uploads/admin/' . $imageName;
-                    //save image in folder path 
+                    if (file_exists(public_path($admin->image))) {
+                        unlink(public_path($admin->image));
+                    }
+                    $imageName = time() . '.' . $image->getClientOriginalExtension();
+                    $imagePath = 'uploads/admin/' . $imageName;
                     $image->move(public_path('uploads/admin/'), $imageName);
-                    // dd($imagePath);
-
                 } else {
                     return redirect('admin/update-admin-details')->with('error', 'Invalid Image');
                 }
             } else {
                 //old image
-                $imageName = $admin->first()->image;    
+                $imagePath = $admin->image;
             }
-
-            $admin->update(['name' => $data['name'], 'image' => $imageName , 'email' => $data['email']]);
+            $admin->update(['name' => $data['name'], 'image' => $imagePath, 'email' => $data['email']]);
             return redirect('admin/update-admin-details')->with('message_success', 'Admin Details updated successfully');
         }
         return view('admin.update_admin_details');

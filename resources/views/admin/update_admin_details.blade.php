@@ -53,7 +53,7 @@
                                 <div class="card-body">
                                     <div class="form-group">
                                         <label for="email">Email address</label>
-                                        <input type="email" name="email" class="form-control" id="email"
+                                        <input type="text" name="email" class="form-control" id="email"
                                             value="{{ Auth::guard('admin')->user()->email }}" placeholder="Enter email"
                                             >
 
@@ -65,8 +65,12 @@
                                             >
                                     </div>
                                     <div class="form-group">
-                                        <label for="image">image</label>
-                                        <img src="{{ asset('uploads/admin/'.Auth::guard('admin')->user()->image) }}" alt="image" style="width: 100px; height: 100px;">
+                                        <div class="d-flex justify-content-between my-3">
+                                            <label for="image">image</label>
+                                            @if(Auth::guard('admin')->user()->image)
+                                                <img src="{{ asset(Auth::guard('admin')->user()->image) }}" alt="image" style="width: 100px; height: 100px;">
+                                            @endif
+                                        </div>
                                         <input type="file" name="image" class="form-control" id="image" placeholder="Enter image">
                                     </div>
                                 </div>
