@@ -98,6 +98,7 @@ class DashboardController extends Controller
 
     public function updateAdminDetails(Request $request)
     {
+        $admin =  Admin::where('email', Auth::guard('admin')->user()->email)->first();
         if ($request->isMethod('post')) {
             $data = $request->all();
             $rules = [

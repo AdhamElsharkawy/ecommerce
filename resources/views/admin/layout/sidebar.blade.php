@@ -41,7 +41,7 @@
           <!-- Add icons to the links using the .nav-icon class
                with font-awesome or any other icon font library -->
           <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
+            <a href="#" class="nav-link">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
                 Settings
@@ -49,14 +49,14 @@
               </p>
             </a>
             <ul class="nav nav-treeview">
-              <li class="nav-item">
-                <a href="{{url('admin/update-admin-details')}}" class="nav-link">
+              <li class="nav-item ">
+                <a href="{{url('admin/update-admin-details')}}" class="nav-link {{ Request::is('admin/update-admin-details', 'admin/update-admin-details/*') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Update Admin Details</p>
                 </a>
               </li>
               <li class="nav-item">
-                <a href="{{url('admin/update-password')}}" class="nav-link ">
+                <a href="{{url('admin/update-password')}}" class="nav-link {{ Request::is('admin/update-password', 'admin/update-password/*') ? 'active' : '' }}">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Update Password</p>
                 </a>
@@ -64,11 +64,11 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a href="pages/widgets.html" class="nav-link">
+            <a href="{{url('admin/cms-pages')}}" class="nav-link {{ Request::is('admin/cms-pages', 'admin/cms-pages/*') ? 'active' : '' }}">
               <i class="nav-icon fas fa-th"></i>
               <p>
-                Widgets
-                <span class="right badge badge-danger">New</span>
+                Pages
+                <span class="right badge"></span>
               </p>
             </a>
           </li>

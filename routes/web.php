@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\CmsPageController;
 use App\Http\Controllers\Admin\DashboardController;
 
 /*
@@ -27,5 +28,13 @@ Route::prefix('admin')->group(function () {
         Route::match(['get', 'post'], '/update-admin-details', [DashboardController::class, 'updateAdminDetails']);
         Route::post('/check-current-password', [DashboardController::class, 'checkCurrentPassword']);
         Route::get('/logout', [DashboardController::class, 'logout']);
+        //Cms Pages
+        Route::prefix('cms-pages')->group(function () {
+            Route::get('/', [CmsPageController::class, 'index']);
+            Route::post('update-cms-page-status', [CmsPageController::class, 'updateCmsPageStatus']);
+            Route::match(['get', 'post'], 'add-edit-cms-page/{id?}', [CmsPageController::class, 'edit']);
+        });
+
+
     });
 });

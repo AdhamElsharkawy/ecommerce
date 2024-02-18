@@ -18,7 +18,7 @@ class AdminsTableSeeder extends Seeder
             'name' => 'admin',
             'email' => 'admin@admin.com',
             //get image from public folder
-            'image' => asset('admin/admin.png'),
+            'image' => 'admin/admin.png',
             'password' => bcrypt('12345678'),
             'type' => 'admin',
             'status' => 1,

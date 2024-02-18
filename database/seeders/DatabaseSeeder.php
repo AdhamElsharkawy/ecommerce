@@ -3,8 +3,11 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\CmsPage;
 use Illuminate\Database\Seeder;
 use Database\Seeders\AdminsTableSeeder;
+use Database\Seeders\CmsPageTableSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -21,6 +24,7 @@ class DatabaseSeeder extends Seeder
         // ]);
         $this->call([
             AdminsTableSeeder::class,
+            CmsPageTableSeeder::class,
         ]);
     }
 }
