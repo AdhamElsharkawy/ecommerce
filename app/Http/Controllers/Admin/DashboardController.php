@@ -22,6 +22,7 @@ class DashboardController extends Controller
     public function login(Request $request)
     {
         if ($request->isMethod('post')) {
+            // dd($request->all());
 
             $rules = [
                 'email' => 'required|email|max:255',
@@ -41,16 +42,24 @@ class DashboardController extends Controller
 
 
             $data = $request->all();
-            if (Auth::guard('admin')->attempt(['email' => $data['email'], 'password' => $data['password']])) {
-                // dd('Success');
+            if (Auth::guard('admin')->attempt(['email' => $data['email'], 'password' => $data['password']], $request->filled('remember_me'))) {
+                // dd($request->filled('remember_me'));
+                // $request->session()->regenerate();
                 return redirect('admin/dashboard');
             } else {
                 return redirect('admin/login')->with('message_error', 'Invalid Username or Password');
             }
         }
-        if (Auth::guard('admin')->check()) {
+
+        if (Auth::viaRemember()) {
             return redirect('admin/dashboard');
         }
+        if (Auth::guard('admin')->check()) {
+            // dd('logged in');
+            return redirect('admin/dashboard');
+        }
+
+
         return view('admin.login');
     }
 

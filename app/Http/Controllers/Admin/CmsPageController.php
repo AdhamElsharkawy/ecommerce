@@ -22,7 +22,6 @@ class CmsPageController extends Controller
      */
     public function create()
     {
-        //
     }
 
     /**
@@ -44,19 +43,19 @@ class CmsPageController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request,$id=null)
+    public function edit(Request $request, $id = null)
     {
-        if($id==""){
+        if ($id == "") {
             $cmsPage = new CmsPage;
             $title = "Add CMS Page";
             $message = "CMS Page added successfully!";
-        }else{
+        } else {
             $cmsPage = CmsPage::find($id);
             $title = "Edit CMS Page";
             $message = "CMS Page updated successfully!";
         }
 
-        if($request->isMethod('post')){
+        if ($request->isMethod('post')) {
             $data = $request->all();
             //validation
             $rules = [
@@ -73,14 +72,13 @@ class CmsPageController extends Controller
             $cmsPage->meta_title = $data['meta_title'];
             $cmsPage->meta_keywords = $data['meta_keywords'];
             $cmsPage->meta_description = $data['meta_description'];
+            // dd($request->all());
             $cmsPage->status = 1;
             $cmsPage->save();
-            return redirect('admin/cms-pages')->with('success_message',$message);
+            return redirect('admin/cms-pages')->with('success_message', $message);
         }
 
-        return view('admin.pages.add_edit_cms_page',compact('title','cmsPage'));
-
-        
+        return view('admin.pages.add_edit_cms_page', compact('title', 'cmsPage'));
     }
 
     /**
@@ -88,11 +86,6 @@ class CmsPageController extends Controller
      */
     public function update(Request $request, CmsPage $cmsPage)
     {
-
-
-
-
-
     }
 
     public function updateCmsPageStatus(Request $request)
@@ -114,8 +107,9 @@ class CmsPageController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(CmsPage $cmsPage)
+    public function destroy($id)
     {
-        //
+        CmsPage::find($id)->delete();
+        return redirect()->back()->with('success_message', 'CMS Page deleted successfully!');
     }
 }

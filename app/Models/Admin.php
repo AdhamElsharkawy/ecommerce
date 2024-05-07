@@ -18,6 +18,10 @@ class Admin extends Authenticatable
         'email',
         'image',
         'password',
+        'social_id',
+        'social_type',
+        'status',
+        'type'
     ];
 
 }

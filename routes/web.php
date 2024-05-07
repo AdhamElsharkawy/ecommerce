@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CmsPageController;
+use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\SocialiteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,10 +22,15 @@ Route::get('/', function () {
     return redirect('/admin/login');
 });
 
+Route::get('login/{provider}/callback', [SocialiteController::class, 'handleProviderCallback']);
 Route::prefix('admin')->group(function () {
     Route::match(['get', 'post'], '/login', [DashboardController::class, 'login']);
+
+    // provide social login
+    Route::get('login/{provider}', [SocialiteController::class, 'redirectToProvider']);
+
     Route::group(['middleware' => 'admin'], function () {
-        Route::get('/dashboard', [DashboardController::class, 'index']);
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard');
         Route::match(['get', 'post'], '/update-password', [DashboardController::class, 'updatePassword']);
         Route::match(['get', 'post'], '/update-admin-details', [DashboardController::class, 'updateAdminDetails']);
         Route::post('/check-current-password', [DashboardController::class, 'checkCurrentPassword']);
@@ -33,8 +40,8 @@ Route::prefix('admin')->group(function () {
             Route::get('/', [CmsPageController::class, 'index']);
             Route::post('update-cms-page-status', [CmsPageController::class, 'updateCmsPageStatus']);
             Route::match(['get', 'post'], 'add-edit-cms-page/{id?}', [CmsPageController::class, 'edit']);
+            Route::get('delete-cms-page/{id}', [CmsPageController::class, 'destroy']);
         });
-
-
+        Route::resource('categories', CategoryController::class);
     });
 });

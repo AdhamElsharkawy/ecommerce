@@ -5,19 +5,19 @@
 
 
 
-        <!-- Content Wrapper. Contains page content -->
+        <!-- Content Wrapper. Contains category content -->
         <div class="content-wrapper">
-            <!-- Content Header (Page header) -->
+            <!-- Content Header (category header) -->
             <section class="content-header">
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>CMS Pages</h1>
+                            <h1>Categories</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Home</a></li>
-                                <li class="breadcrumb-item active">Pages</li>
+                                <li class="breadcrumb-item active">Categories</li>
                             </ol>
                         </div>
                     </div>
@@ -40,9 +40,9 @@
                                             </button>
                                         </div>
                                     @endif
-                                    <h3 class="card-title">Pages</h3>
-                                    <a href="{{ url('admin/cms-pages/add-edit-cms-page') }}" class="btn btn-primary btn-sm"
-                                        style="float: right;">Add Page</a>
+                                    <h3 class="card-title">categories</h3>
+                                    <a href="{{ url('admin/categories/create') }}" class="btn btn-primary btn-sm"
+                                        style="float: right;">Add category</a>
 
                                 </div>
                                 <!-- /.card-header -->
@@ -51,39 +51,33 @@
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>Title</th>
-                                                <th>URL</th>
+                                                <th>parentID</th>                                           
+                                                <th>Image</th>
+                                                <th>Name</th>
                                                 <th>CreatedOn</th>
                                                 <th>Actions</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            @foreach ($cmsPages as $page)
+                                            @foreach ($categories as $category)
                                                 <tr>
-                                                    <td>{{ $page->id }}</td>
-                                                    <td>{{ $page->title }}</td>
-                                                    <td>{{ $page->url }}</td>
-                                                    <td>{{ date('F j, Y, g:i a', strtotime($page->created_at)) }}</td>
+                                                    <td>{{ $category->id }}</td>
+                                                    <td>{{ $category->parent_id }}</td>
                                                     <td>
-                                                        @if ($page['status'] == 1)
-                                                            <a class="updateCmsPageStatus" id="page-{{ $page['id'] }}"
-                                                                page_id="{{ $page['id'] }}" href="javascript:void(0)">
-                                                                <i class="fas fa-toggle-on" aria-hidden="true"
-                                                                    status="Active"></i>
-                                                            </a>
-                                                        @else
-                                                            <a class="updateCmsPageStatus" id="page-{{ $page['id'] }}"
-                                                                page_id="{{ $page['id'] }}" href="javascript:void(0)">
-                                                                <i class="fas fa-toggle-off" style="color: grey"
-                                                                    aria-hidden="true" status="Inactive"></i>
-                                                            </a>
+                                                        @if (!empty($category->image))
+                                                            <img src="{{ asset($category->image) }}"
+                                                                style="width: 100px;">
                                                         @endif
-                                                        <a title="Edit Page"
-                                                            href="{{ url('admin/cms-pages/add-edit-cms-page/' . $page->id) }}"><i
+                                             
+                                                    <td>{{ $category->name }}</td>
+                                                    <td>{{ date('F j, Y, g:i a', strtotime($category->created_at)) }}</td>
+                                                    <td>
+                                                        <a title="Edit category"
+                                                            href="{{ url('admin/categories/' . $category->id .'/edit') }}"><i
                                                                 class="fas fa-edit mx-4"></i></a>
-                                                        <a title="Delete Page" href="javascript:void(0)"
-                                                            class="confirmDelete" record="page"
-                                                            recordid="{{ $page->id }}"><i class="fas fa-trash"></i></a>
+                                                        <a title="Delete category" href="javascript:void(0)"
+                                                            class="confirmDelete" record="category"
+                                                            recordid="{{ $category->id }}"><i class="fas fa-trash"></i></a>
 
 
                                                     </td>
@@ -130,5 +124,5 @@
         });
     </script>
 
-    @include('admin.pages.pages_ajax')
+    @include('admin.pages.categories.ajax_script')
 @endpush
