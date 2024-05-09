@@ -51,8 +51,7 @@
                                 @endif
 
                                 <!-- form start -->
-                                <form action="{{ url('admin/categories') }}" enctype="multipart/form-data"
-                                    method="POST">
+                                <form action="{{ url('admin/categories') }}" enctype="multipart/form-data" method="POST">
                                     @csrf
                                     <div class="card-body">
                                         <div class="form-group">
@@ -64,8 +63,25 @@
                                             <div class="d-flex justify-content-between my-3">
                                                 <label for="image">image</label>
                                             </div>
-                                            <input type="file" name="image" class="form-control" id="image" accept="image/*"
-                                                placeholder="Enter image">
+                                            <input type="file" name="image" class="form-control" id="image"
+                                                accept="image/*" placeholder="Enter image">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="">Status</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="status" value="active"
+                                                    checked>
+                                                <label class="form-check-label">
+                                                    Active
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="status"
+                                                    value="archived">
+                                                <label class="form-check-label">
+                                                    Archived
+                                                </label>
+                                            </div>
                                         </div>
                                         <div class="form-group">
                                             <label for="name">select parent</label>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Admin;
 
+use App\Models\Category;
+use App\Rules\CategoryCheck;
 use Illuminate\Foundation\Http\FormRequest;
 
 class UpdateCategoryRequest extends FormRequest
@@ -22,9 +24,18 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'required|string|min:3|max:255|unique:categories,name,' . $this->category->id,
+            'name' => [
+                'required', 'string', 'unique:categories,name,' . $this->category->id, 'min:3', 'max:255'
+            ],
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'parent_id' => 'nullable|integer|exists:categories,id',
+            'parent_id' => [
+                'nullable',
+                'integer',
+                'exists:categories,id',
+                new CategoryCheck($this->category),
+            ],
+            'status' => 'in:active,archived',
+
         ];
     }
 }

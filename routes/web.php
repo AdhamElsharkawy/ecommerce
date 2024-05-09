@@ -42,6 +42,6 @@ Route::prefix('admin')->group(function () {
             Route::match(['get', 'post'], 'add-edit-cms-page/{id?}', [CmsPageController::class, 'edit']);
             Route::get('delete-cms-page/{id}', [CmsPageController::class, 'destroy']);
         });
-        Route::resource('categories', CategoryController::class);
+        Route::resource('categories', CategoryController::class)->except(['show']);
     });
 });

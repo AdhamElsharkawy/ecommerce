@@ -31,15 +31,8 @@
                         <div class="col-12">
                             <div class="card">
                                 <div class="card-header">
-                                    @if (Session::has('success_message'))
-                                        <div class="alert alert-success alert-dismissible fade show" role="alert"
-                                            style="margin-top: 10px;">
-                                            {{ Session::get('success_message') }}
-                                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                    @endif
+                                    <x-alert type="success_message"/>
+                                    <x-alert type="info"/>
                                     <h3 class="card-title">categories</h3>
                                     <a href="{{ url('admin/categories/create') }}" class="btn btn-primary btn-sm"
                                         style="float: right;">Add category</a>
@@ -51,9 +44,10 @@
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>parentID</th>                                           
+                                                <th>parentID</th>
                                                 <th>Image</th>
                                                 <th>Name</th>
+                                                <th>Status</th>
                                                 <th>CreatedOn</th>
                                                 <th>Actions</th>
                                             </tr>
@@ -65,19 +59,24 @@
                                                     <td>{{ $category->parent_id }}</td>
                                                     <td>
                                                         @if (!empty($category->image))
-                                                            <img src="{{ asset($category->image) }}"
-                                                                style="width: 100px;">
+                                                            <img src="{{ asset($category->image) }}" style="width: 100px;">
                                                         @endif
-                                             
                                                     <td>{{ $category->name }}</td>
+                                                    <td>{{ ucfirst($category->status) }}</td>
                                                     <td>{{ date('F j, Y, g:i a', strtotime($category->created_at)) }}</td>
                                                     <td>
                                                         <a title="Edit category"
-                                                            href="{{ url('admin/categories/' . $category->id .'/edit') }}"><i
+                                                            href="{{ url('admin/categories/' . $category->id . '/edit') }}"><i
                                                                 class="fas fa-edit mx-4"></i></a>
-                                                        <a title="Delete category" href="javascript:void(0)"
-                                                            class="confirmDelete" record="category"
-                                                            recordid="{{ $category->id }}"><i class="fas fa-trash"></i></a>
+                                                        <form action="{{ url('admin/categories/' . $category->id) }}" class="d-inline"
+                                                            method="POST">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button type="submit" title="Delete category"
+                                                                style="border: none; background-color:transparent;">
+                                                                <i class="fas fa-trash text-danger"></i>
+                                                        </form>
+
 
 
                                                     </td>
@@ -102,8 +101,6 @@
 @endsection
 
 @push('push_scripts')
-
-
     <script>
         $(function() {
             $("#example1").DataTable({

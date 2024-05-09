@@ -58,8 +58,9 @@
                                     <div class="card-body">
                                         <div class="form-group">
                                             <label for="name">Name</label>
-                                            <input type="name" name="name" class="form-control" id="name"
-                                                value="{{ $category->name }}" placeholder="Enter name">
+                                            <input type="name" name="name" @class(['form-control','is-invalid' => $errors->has('name')])
+                                                id="name" @error('name') is-invalid @enderror
+                                                value="{{old('name',$category->name)}}" placeholder="Enter name">
                                         </div>
                                         <div class="form-group">
                                             <div class="d-flex justify-content-between my-3">
@@ -68,20 +69,36 @@
                                             <input type="file" name="image" class="form-control" id="image"
                                                 accept="image/*" placeholder="Enter image">
                                         </div>
+
+                                        <div class="form-group">
+                                            <label for="">Status</label>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="status" value="active"
+                                                    @checked(old('status',$category->status) == 'active')>
+                                                <label class="form-check-label">
+                                                    Active
+                                                </label>
+                                            </div>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="radio" name="status"
+                                                    value="archived" @checked(old('status',$category->status) == 'archived')>
+                                                <label class="form-check-label">
+                                                    Archived
+                                                </label>
+                                            </div>
+                                        </div>
+
                                         <div class="form-group">
                                             <label for="name">select parent</label>
                                             <select name="parent_id" class="form-control" id="parent_id">
                                                 <option value="">Select parent</option>
-                                                @foreach ($categories as $category)
-                                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                                @foreach ($categories as $childCategory)
+                                                    <option value="{{ $childCategory->id }}" @selected(old('parent_id',$category->parent_id) == $childCategory->id)>
+                                                        {{ $childCategory->name }}</option>
                                                 @endforeach
                                             </select>
 
                                         </div>
-
-
-
-
 
                                     </div>
                                     <!-- /.card-body -->
