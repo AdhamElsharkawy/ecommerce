@@ -13,8 +13,8 @@
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
-                                <li class="breadcrumb-item"><a href="{{ url('admin/dashboard') }}">Home</a></li>
-                                <li class="breadcrumb-item active">Categories</li>
+                                <li class="breadcrumb-item active"><a href="{{ url('admin/dashboard') }}">Trash</a></li>
+                                <li class="breadcrumb-item">Categories</li>
                             </ol>
                         </div>
                     </div>
@@ -30,9 +30,6 @@
                                 <div class="card-header">
                                     <x-alert type="success_message" />
                                     <x-alert type="info" />
-                                    <h3 class="card-title">Categories</h3>
-                                    <a href="{{ url('admin/categories/create') }}" class="btn btn-primary btn-sm"
-                                        style="float: right;">Add category</a>
                                 </div>
                                 <!-- /.card-header -->
                                 {{-- form for filter and search inputs --}}
@@ -82,7 +79,7 @@
                                         <thead>
                                             <tr>
                                                 <th>ID</th>
-                                                <th>parentID</th>
+                                                {{-- <th>parentID</th> --}}
                                                 <th>Image</th>
                                                 <th>Name</th>
                                                 <th>Status</th>
@@ -94,7 +91,7 @@
                                             @foreach ($categories as $category)
                                                 <tr>
                                                     <td>{{ $category->id }}</td>
-                                                    <td>{{ $category->parent_id }}</td>
+                                                    {{-- <td>{{ $category->parent_id }}</td> --}}
                                                     <td>
                                                         @if (!empty($category->image))
                                                             <img src="{{ asset($category->image) }}" style="width: 100px;">
@@ -104,10 +101,15 @@
                                                     <td>{{ ucfirst($category->status) }}</td>
                                                     <td>{{ date('F j, Y, g:i a', strtotime($category->created_at)) }}</td>
                                                     <td>
-                                                        <a title="Edit category"
-                                                            href="{{ url('admin/categories/' . $category->id . '/edit') }}"><i
-                                                                class="fas fa-edit mx-4"></i></a>
-                                                        <form action="{{ url('admin/categories/' . $category->id) }}"
+                                                        <form action="{{ url('admin/categories/' . $category->id . '/restore') }}" method="POST">
+                                                            @csrf
+                                                            @method('PUT')
+                                                            <button type="submit" title="Restore category"
+                                                                style="border: none; background-color:transparent;">
+                                                                <i class="fas fa-undo text-success"></i>
+                                                            </button>
+                                                        </form>
+                                                        <form action="{{ url('admin/categories/' . $category->id .'/force-delete') }}"
                                                             class="d-inline" method="POST">
                                                             @csrf
                                                             @method('DELETE')

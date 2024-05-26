@@ -20,6 +20,8 @@ return new class extends Migration
             $table->enum('status', ['active', 'archived'])->default('active');
             $table->foreignId('parent_id')->nullable()->constrained('categories')->nullOnDelete();
 
+            
+            $table->softDeletes();
             $table->timestamps();
         });
     }

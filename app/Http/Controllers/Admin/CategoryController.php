@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Models\Category;
-use Illuminate\Support\Str;
-use App\Http\Traits\ImageUpload;
 use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Redirect;
 use App\Http\Requests\Admin\CreateCategoryRequest;
 use App\Http\Requests\Admin\UpdateCategoryRequest;
+use App\Http\Traits\ImageUpload;
+use App\Models\Category;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Str;
 
 class CategoryController extends Controller
 {
@@ -16,9 +17,9 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::all();
+        $categories = Category::filter($request->query())->paginate(1);
         return view('admin.pages.categories.index', compact('categories'));
     }
 
@@ -39,9 +40,9 @@ class CategoryController extends Controller
         $data = $request->validated();
 
         $data['slug'] = Str::slug($data['name']);
-        $data['image']  = $this->uploadImage($request, 'uploads/categories/');
-
+        $data['image'] = $this->uploadImage($request, 'uploads/categories/');
         Category::create($data);
+
         return Redirect::route('categories.index')->with('success', 'Category has been added successfully!');
     }
 
@@ -69,7 +70,7 @@ class CategoryController extends Controller
     {
         $data = $request->validated();
         $data['slug'] = Str::slug($data['name']);
-        $newImage  = $this->uploadImage($request, 'uploads/categories/', $category->image);
+        $newImage = $this->uploadImage($request, 'uploads/categories/', $category->image);
         if ($newImage !== null) {
             $data['image'] = $newImage;
         }
@@ -86,8 +87,35 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
-        $this->deleteImage($category->image);
+        // $this->deleteImage($category->image);
 
         return redirect()->route('categories.index')->with('success_message', 'Category has been deleted successfully!');
+    }
+
+    /**
+     * Display a listing of the trashed resources.
+     */
+    public function trash(Request $request)
+    {
+        $categories = Category::onlyTrashed()->paginate(1);
+
+        return view('admin.pages.categories.trash', compact('categories'));
+    }
+
+    public function restore($id)
+    {
+        $category = Category::onlyTrashed()->findOrFail($id);
+        $category->restore();
+
+        return redirect()->route('categories.index')->with('success_message', 'Category has been restored successfully!');
+    }
+
+    public function forceDelete($id)
+    {
+        $category = Category::onlyTrashed()->findOrFail($id);
+        $this->deleteImage($category->image);
+        $category->forceDelete();
+
+        return redirect()->route('categories.index')->with('success_message', 'Category has been deleted permanently!');
     }
 }

@@ -16,7 +16,7 @@ class AdminsTableSeeder extends Seeder
     {
         Admin::create([
             'name' => 'admin',
-            'email' => 'adhamm.elsharkawyy@gmail.com',
+            'email' => 'admin@admin.com',
             //get image from public folder
             'image' => 'admin/admin.png',
             'password' => bcrypt('12345678'),

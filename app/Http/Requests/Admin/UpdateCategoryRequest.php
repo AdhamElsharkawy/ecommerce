@@ -25,7 +25,7 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name' => [
-                'required', 'string', 'unique:categories,name,' . $this->category->id, 'min:3', 'max:255'
+                'required', 'string', 'min:3', 'max:255','unique:categories,name,' . $this->category->id
             ],
             'image' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'parent_id' => [

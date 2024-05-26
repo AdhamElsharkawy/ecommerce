@@ -29,9 +29,11 @@ class CategoryCheck implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        $parent = Category::where('id', $value)->first();
-        if ($parent->parent_id == $this->category->id) {
-            $fail('Invalid parent category. Please select a valid parent category.');
+        $parent = Category::find($value);
+        while ($parent) {
+            if ($parent->parent_id == $this->category->id) {
+                $fail('Invalid parent category. Please select a valid parent category.');
+            }
         }
     }
 }
