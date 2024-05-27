@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('admins', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('store_id')->nullable()->constrained('stores')->nullOnDelete();
             $table->string('name');
             $table->string('password');
             $table->string('image');
             $table->string('type');
             $table->string('email')->unique();
             $table->tinyInteger('status')->default(1);
+
             $table->rememberToken();
 
             $table->timestamps();

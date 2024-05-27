@@ -98,6 +98,16 @@
                             </p>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a href="{{ url('admin/products') }}"
+                            class="nav-link {{ Request::is('admin/products', 'admin/products/*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-th"></i>
+                            <p>
+                                Products
+                                <span class="right badge"></span>
+                            </p>
+                        </a>
+                    </li>
 
 
 

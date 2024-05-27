@@ -11,9 +11,11 @@ class ProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $products = Product::filter($request->query())->with(["category"])->paginate();
+
+        return view('admin.pages.products.index', compact('products'));
     }
 
     /**

@@ -3,8 +3,10 @@
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\CmsPageController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SocialiteController;
 use Illuminate\Support\Facades\Route;
+
 
 
 /*
@@ -50,5 +52,6 @@ Route::prefix('admin')->group(function () {
 
 
         Route::resource('categories', CategoryController::class)->except(['show']);
+        Route::resource('products', ProductController::class)->except(['show']);
     });
 });

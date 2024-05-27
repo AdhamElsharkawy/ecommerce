@@ -26,9 +26,9 @@ return new class extends Migration
             $table->float('rating')->nullable();
             $table->boolean('is_featured')->default(false);
             $table->enum('status', ['active', 'draft','archived'])->default('active');
-            $table->softDeletes();
-
             $table->timestamps();
+
+            $table->softDeletes();
         });
     }
 

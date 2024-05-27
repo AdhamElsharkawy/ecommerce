@@ -22,7 +22,6 @@ class AdminsTableSeeder extends Seeder
             'password' => bcrypt('12345678'),
             'type' => 'admin',
             'status' => 1,
-            'remember_token' => Str::random(10),
         ]);
     }
 }
